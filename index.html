@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Guess the Job — Work Collocations</title>
+  <title>Guess the Job — Cross Out Word Bank</title>
   <style>
     * {
       box-sizing: border-box;
@@ -23,10 +23,10 @@
 
     .app {
       background: #ffffff;
-      max-width: 800px;
+      max-width: 820px;
       width: 100%;
       border-radius: 32px;
-      padding: 28px 32px 32px;
+      padding: 26px 30px 30px;
       box-shadow: 0 20px 40px rgba(0, 20, 50, 0.15), 0 8px 20px rgba(0, 0, 0, 0.05);
       display: flex;
       flex-direction: column;
@@ -37,47 +37,131 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       flex-wrap: wrap;
       gap: 10px;
     }
 
     .header h1 {
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 700;
       color: #1a2b4c;
       letter-spacing: -0.3px;
     }
 
+    .badges {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
     .progress {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
       color: #7a89ad;
       background: #eef2fb;
       border-radius: 999px;
-      padding: 5px 16px;
+      padding: 5px 14px;
     }
 
     .score {
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 700;
       color: #1e3c72;
       background: #e6eeff;
-      padding: 5px 18px;
+      padding: 5px 14px;
       border-radius: 999px;
     }
 
+    /* ---------- Word bank ---------- */
+    .bank-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #7a89ad;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      margin-bottom: 8px;
+    }
+
+    .word-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 14px 16px;
+      background: #f7f9fd;
+      border: 2px dashed #d0ddef;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      min-height: 80px;
+    }
+
+    .word-chip {
+      font: inherit;
+      font-size: 14.5px;
+      font-weight: 600;
+      color: #1e3c72;
+      background: #ffffff;
+      border: 2px solid #ccd9f0;
+      border-radius: 40px;
+      padding: 7px 16px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .word-chip:hover:not(.crossed):not(.disabled) {
+      background: #e2ebff;
+      border-color: #a3b9e0;
+      transform: translateY(-1px);
+    }
+
+    /* Crossed out (used) words */
+    .word-chip.crossed {
+      text-decoration: line-through;
+      opacity: 0.5;
+      pointer-events: none;
+      background: #f0f2f5;
+      border-color: #d0d7e5;
+      color: #8896b3;
+    }
+
+    /* Correct answer styling */
+    .word-chip.crossed.correct {
+      text-decoration: none;
+      opacity: 0.9;
+      background: #e0f5e8;
+      border-color: #22a35a;
+      color: #0d5c2e;
+      box-shadow: 0 0 0 2px rgba(34, 163, 90, 0.2);
+    }
+
+    /* Wrong guess styling */
+    .word-chip.crossed.wrong {
+      text-decoration: line-through;
+      background: #fde8ea;
+      border-color: #e04050;
+      color: #a11f2f;
+    }
+
+    /* When the round is locked (correct found) */
+    .word-chip.disabled {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    /* ---------- Description ---------- */
     .description-box {
       background: #f8f9fc;
       border-left: 4px solid #2a5298;
       border-radius: 12px;
       padding: 22px 26px;
-      margin-bottom: 20px;
-      font-size: 18px;
-      line-height: 1.65;
+      margin-bottom: 18px;
+      font-size: 17.5px;
+      line-height: 1.7;
       color: #1e2c44;
       font-weight: 500;
-      min-height: 140px;
+      min-height: 130px;
     }
 
     .description-box .highlight {
@@ -88,42 +172,22 @@
       border-radius: 6px;
     }
 
-    .input-area {
+    .feedback {
+      font-size: 15.5px;
+      font-weight: 600;
+      margin-bottom: 14px;
+      min-height: 26px;
+      color: #6b7a99;
+    }
+
+    .feedback.good { color: #1a8f4d; }
+    .feedback.bad  { color: #c92b3d; }
+
+    .controls {
       display: flex;
+      justify-content: flex-end;
       gap: 12px;
-      margin-bottom: 18px;
       flex-wrap: wrap;
-    }
-
-    .job-input {
-      flex: 1;
-      font: inherit;
-      font-size: 18px;
-      font-weight: 500;
-      color: #1e2c44;
-      padding: 14px 18px;
-      border: 2px solid #d0ddef;
-      border-radius: 16px;
-      background: #fafcff;
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      min-width: 200px;
-    }
-
-    .job-input:focus {
-      border-color: #2a5298;
-      box-shadow: 0 0 0 4px rgba(42, 82, 152, 0.12);
-      background: #fff;
-    }
-
-    .job-input.correct {
-      border-color: #22a35a;
-      background: #f2fcf6;
-    }
-
-    .job-input.incorrect {
-      border-color: #e04050;
-      background: #fef5f6;
     }
 
     .btn {
@@ -141,10 +205,7 @@
       user-select: none;
     }
 
-    .btn:hover {
-      background: #e0e7f3;
-      transform: translateY(-1px);
-    }
+    .btn:hover { background: #e0e7f3; transform: translateY(-1px); }
 
     .btn.primary {
       background: linear-gradient(135deg, #2a5298, #1e3c72);
@@ -157,79 +218,19 @@
       box-shadow: 0 16px 28px -8px rgba(30, 60, 114, 0.5);
     }
 
-    .btn:disabled {
-      opacity: 0.35;
-      pointer-events: none;
-      transform: none;
-    }
+    .btn:disabled { opacity: 0.35; pointer-events: none; transform: none; }
 
-    .feedback {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 18px;
-      min-height: 28px;
-      color: #6b7a99;
-    }
-
-    .feedback.good {
-      color: #1a8f4d;
-    }
-
-    .feedback.bad {
-      color: #c92b3d;
-    }
-
-    .controls {
-      display: flex;
-      justify-content: flex-end;
-      gap: 14px;
-      margin-top: 8px;
-      flex-wrap: wrap;
-    }
-
-    .finish-screen {
-      text-align: center;
-      padding: 40px 20px;
-    }
-
-    .finish-screen .emoji {
-      font-size: 64px;
-      line-height: 1;
-    }
-
-    .finish-screen h2 {
-      color: #1e3c72;
-      margin: 16px 0 8px;
-      font-size: 28px;
-    }
-
-    .finish-screen p {
-      font-size: 20px;
-      color: #2c3e5c;
-      margin-bottom: 24px;
-    }
+    .finish-screen { text-align: center; padding: 40px 20px; }
+    .finish-screen .emoji { font-size: 64px; line-height: 1; }
+    .finish-screen h2 { color: #1e3c72; margin: 16px 0 8px; font-size: 28px; }
+    .finish-screen p { font-size: 20px; color: #2c3e5c; margin-bottom: 24px; }
 
     @media (max-width: 600px) {
-      .app {
-        padding: 20px 18px 24px;
-        border-radius: 24px;
-      }
-      .header h1 {
-        font-size: 18px;
-      }
-      .description-box {
-        font-size: 16px;
-        padding: 16px 18px;
-      }
-      .job-input {
-        font-size: 16px;
-        padding: 12px 14px;
-      }
-      .btn {
-        font-size: 14px;
-        padding: 10px 18px;
-        min-width: 90px;
-      }
+      .app { padding: 20px 16px 24px; border-radius: 24px; }
+      .header h1 { font-size: 17px; }
+      .description-box { font-size: 15.5px; padding: 16px 18px; }
+      .word-chip { font-size: 13px; padding: 6px 12px; }
+      .btn { font-size: 14px; padding: 10px 18px; min-width: 90px; }
     }
   </style>
 </head>
@@ -238,20 +239,20 @@
 <div class="app" id="app">
   <div class="header">
     <h1>🕵️ Guess the Job</h1>
-    <span class="progress" id="progress">1 / 8</span>
-    <span class="score" id="scoreDisplay">Score: 0</span>
+    <div class="badges">
+      <span class="progress" id="progress">1 / 8</span>
+      <span class="score" id="scoreDisplay">Score: 0</span>
+    </div>
   </div>
+
+  <div class="bank-label">Choose a job from the list:</div>
+  <div class="word-bank" id="wordBank"></div>
 
   <div class="description-box" id="descriptionBox"></div>
-
-  <div class="input-area">
-    <input type="text" id="jobInput" class="job-input" placeholder="Type the job here..." autocomplete="off" autocapitalize="off" spellcheck="false">
-  </div>
 
   <div class="feedback" id="feedback"></div>
 
   <div class="controls">
-    <button class="btn primary" id="checkBtn">Check</button>
     <button class="btn primary" id="nextBtn" style="display:none;">Next →</button>
   </div>
 </div>
@@ -259,40 +260,59 @@
 <script>
   (function() {
     // ------------------------------------------------------------
-    // Job descriptions using pre-intermediate collocations
+    // 8 Correct answers + 3 distractors (total 11)
+    // ------------------------------------------------------------
+    const baseProfessions = [
+      // Correct answers (8)
+      "nurse",
+      "scientist",
+      "police officer",
+      "pilot",
+      "journalist",
+      "sales manager",
+      "soldier",
+      "business owner",
+      // Distractors (3)
+      "teacher",
+      "chef",
+      "driver"
+    ];
+
+    // ------------------------------------------------------------
+    // Job descriptions
     // ------------------------------------------------------------
     const jobs = [
       {
         description: "I <span class='highlight'>work as part of a team</span>. I <span class='highlight'>care for sick people</span>. I <span class='highlight'>give medicine to patients</span>. I sometimes <span class='highlight'>work at night</span>.",
-        answers: ["nurse", "a nurse", "male nurse", "nurses"]
+        answer: "nurse"
       },
       {
         description: "I <span class='highlight'>work alone</span> or in a team. I <span class='highlight'>do research</span>. I <span class='highlight'>solve problems</span>. I <span class='highlight'>study hard</span> and <span class='highlight'>learn new skills</span>. I sometimes <span class='highlight'>attend conferences</span>.",
-        answers: ["scientist", "a scientist", "researcher", "a researcher"]
+        answer: "scientist"
       },
       {
         description: "I <span class='highlight'>investigate crime</span>. I <span class='highlight'>respond to emergencies</span>. I <span class='highlight'>control traffic</span>. I <span class='highlight'>work long hours</span> and sometimes <span class='highlight'>work at night</span>.",
-        answers: ["police officer", "police officer", "policeman", "policewoman", "cop", "a police officer", "police"]
+        answer: "police officer"
       },
       {
         description: "I <span class='highlight'>fly planes</span>. I <span class='highlight'>do a training course</span>. I <span class='highlight'>work away from home</span>. I sometimes <span class='highlight'>work at night</span>.",
-        answers: ["pilot", "a pilot", "pilots"]
+        answer: "pilot"
       },
       {
         description: "I <span class='highlight'>write news stories</span>. I <span class='highlight'>gather information</span>. I <span class='highlight'>always know the latest news</span>. I sometimes <span class='highlight'>work long hours</span>.",
-        answers: ["journalist", "a journalist", "reporter", "a reporter", "news reporter"]
+        answer: "journalist"
       },
       {
         description: "I <span class='highlight'>run a team</span>. I <span class='highlight'>motivate the team</span>. I <span class='highlight'>give customers what they want</span>. I <span class='highlight'>work as part of a team</span>.",
-        answers: ["sales manager", "a sales manager", "manager", "a manager", "sales director"]
+        answer: "sales manager"
       },
       {
         description: "I <span class='highlight'>fight in wars</span>. I <span class='highlight'>keep fit</span>. I do <span class='highlight'>rescue work</span>. I <span class='highlight'>learn new skills</span>.",
-        answers: ["soldier", "a soldier", "soldiers", "army soldier"]
+        answer: "soldier"
       },
       {
         description: "I <span class='highlight'>run a company</span>. I <span class='highlight'>do research</span>. I <span class='highlight'>solve problems</span>. I <span class='highlight'>work long hours</span>.",
-        answers: ["business owner", "a business owner", "entrepreneur", "a entrepreneur", "company owner", "businessman", "businesswoman", "director", "ceo"]
+        answer: "business owner"
       }
     ];
 
@@ -301,88 +321,115 @@
     // ------------------------------------------------------------
     let currentIndex = 0;
     let score = 0;
-    let checked = false;
+    let locked = false;
 
     const app = document.getElementById('app');
     const progressEl = document.getElementById('progress');
     const scoreDisplay = document.getElementById('scoreDisplay');
     const descriptionBox = document.getElementById('descriptionBox');
-    const jobInput = document.getElementById('jobInput');
+    const wordBank = document.getElementById('wordBank');
     const feedbackEl = document.getElementById('feedback');
-    const checkBtn = document.getElementById('checkBtn');
     const nextBtn = document.getElementById('nextBtn');
 
     // ------------------------------------------------------------
-    // Normalize answer (case-insensitive, remove articles, spaces)
+    // Shuffle array (Fisher–Yates)
     // ------------------------------------------------------------
-    function normalize(str) {
-      let s = str.toLowerCase().trim();
-      // Remove leading "a ", "an ", "the "
-      s = s.replace(/^(a|an|the)\s+/, '');
-      // Remove punctuation
-      s = s.replace(/[.,!?;:]/g, '');
-      // Collapse spaces
-      s = s.replace(/\s+/g, ' ');
-      return s;
+    function shuffleArray(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
     }
 
     // ------------------------------------------------------------
-    // Render
+    // Build word bank (shuffled)
+    // ------------------------------------------------------------
+    function buildBank() {
+      wordBank.innerHTML = '';
+      const shuffled = shuffleArray(baseProfessions);
+
+      shuffled.forEach(prof => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'word-chip';
+        chip.textContent = prof;
+        chip.dataset.prof = prof;
+        chip.addEventListener('click', () => onChipClick(chip));
+        wordBank.appendChild(chip);
+      });
+    }
+
+    // ------------------------------------------------------------
+    // Chip click handler
+    // ------------------------------------------------------------
+    function onChipClick(chip) {
+      if (locked || chip.classList.contains('crossed')) return;
+
+      // Cross out the selected chip
+      chip.classList.add('crossed');
+
+      const chosen = chip.dataset.prof;
+      const job = jobs[currentIndex];
+
+      if (chosen === job.answer) {
+        // Correct answer
+        chip.classList.add('correct');
+        score++;
+        scoreDisplay.textContent = 'Score: ' + score;
+        feedbackEl.textContent = '✓ Correct! It\'s a ' + job.answer + '.';
+        feedbackEl.className = 'feedback good';
+
+        // Lock the board
+        locked = true;
+        nextBtn.style.display = '';
+        nextBtn.textContent = currentIndex === jobs.length - 1 ? 'Finish' : 'Next →';
+
+        // Disable all other chips visually
+        wordBank.querySelectorAll('.word-chip').forEach(c => {
+          c.classList.add('disabled');
+        });
+      } else {
+        // Wrong answer
+        chip.classList.add('wrong');
+        feedbackEl.textContent = '✗ Not quite, try another one!';
+        feedbackEl.className = 'feedback bad';
+
+        // Check if all chips have been crossed out
+        const allChips = wordBank.querySelectorAll('.word-chip');
+        const crossedChips = wordBank.querySelectorAll('.word-chip.crossed');
+
+        if (allChips.length === crossedChips.length) {
+          // Out of options: reveal the correct answer
+          wordBank.querySelectorAll('.word-chip').forEach(c => {
+            if (c.dataset.prof === job.answer) {
+              c.classList.add('correct');
+            }
+          });
+          feedbackEl.innerHTML = 'Out of options! The correct answer is: <strong>' + job.answer + '</strong>';
+          locked = true;
+          nextBtn.style.display = '';
+          nextBtn.textContent = currentIndex === jobs.length - 1 ? 'Finish' : 'Next →';
+        }
+      }
+    }
+
+    // ------------------------------------------------------------
+    // Render current description
     // ------------------------------------------------------------
     function render() {
-      checked = false;
+      locked = false;
       const job = jobs[currentIndex];
       progressEl.textContent = (currentIndex + 1) + ' / ' + jobs.length;
       scoreDisplay.textContent = 'Score: ' + score;
       descriptionBox.innerHTML = job.description;
-      jobInput.value = '';
-      jobInput.readOnly = false;
-      jobInput.classList.remove('correct', 'incorrect');
       feedbackEl.textContent = '';
       feedbackEl.className = 'feedback';
-      checkBtn.style.display = '';
-      checkBtn.disabled = false;
       nextBtn.style.display = 'none';
-      nextBtn.textContent = currentIndex === jobs.length - 1 ? 'Finish' : 'Next →';
-      jobInput.focus();
-    }
 
-    // ------------------------------------------------------------
-    // Check answer
-    // ------------------------------------------------------------
-    function check() {
-      if (checked) return;
-      checked = true;
-
-      const job = jobs[currentIndex];
-      const userAnswer = jobInput.value.trim();
-      const normalizedUser = normalize(userAnswer);
-
-      if (normalizedUser === '') {
-        feedbackEl.textContent = 'Please type an answer.';
-        feedbackEl.className = 'feedback bad';
-        checked = false;
-        return;
-      }
-
-      // Check against all acceptable answers
-      const isCorrect = job.answers.some(ans => normalize(ans) === normalizedUser);
-
-      if (isCorrect) {
-        score++;
-        feedbackEl.textContent = '✓ Correct! It\'s a ' + job.answers[0] + '.';
-        feedbackEl.className = 'feedback good';
-        jobInput.classList.add('correct');
-      } else {
-        feedbackEl.innerHTML = `✗ Not quite. The correct answer is: <strong>${job.answers[0]}</strong>`;
-        feedbackEl.className = 'feedback bad';
-        jobInput.classList.add('incorrect');
-      }
-
-      scoreDisplay.textContent = 'Score: ' + score;
-      jobInput.readOnly = true;
-      checkBtn.style.display = 'none';
-      nextBtn.style.display = '';
+      // Rebuild and shuffle the bank for each question
+      buildBank();
     }
 
     // ------------------------------------------------------------
@@ -415,19 +462,14 @@
     }
 
     // ------------------------------------------------------------
-    // Event listeners
+    // Events
     // ------------------------------------------------------------
-    checkBtn.addEventListener('click', check);
     nextBtn.addEventListener('click', next);
 
-    jobInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && locked) {
         e.preventDefault();
-        if (checked) {
-          next();
-        } else {
-          check();
-        }
+        next();
       }
     });
 
